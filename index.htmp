@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Detective Number Mystery</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #4caf50;
+      text-align: center;
+      padding: 5px;
+      margin: 0;
+      min-height: 100vh;
+    }
+
+    .container {
+      background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%);
+      padding: 20px 15px;
+      border-radius: 20px;
+      max-width: 420px;
+      width: 95%;
+      margin: 10px auto;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+      min-height: 85vh;
+    }
+
+    .sticky-header {
+      position: sticky;
+      top: 0;
+      background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%);
+      z-index: 100;
+      padding: 8px 0;
+      border-radius: 15px;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    h1 {
+      color: #1b5e20;
+      font-size: 3em;
+      margin: 20px 0;
+      text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+      line-height: 1.1;
+    }
+
+    .fox {
+      font-size: 8em;
+      margin: 20px 0;
+      text-shadow: 4px 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .intro {
+      font-size: 2.5em;
+      color: #1b5e20;
+      margin: 20px 0;
+      font-weight: bold;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+
+    button {
+      background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
+      color: white;
+      border: none;
+      padding: 16px 24px;
+      font-size: 1.4em;
+      border-radius: 30px;
+      cursor: pointer;
+      margin: 12px 6px;
+      font-weight: bold;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+      touch-action: manipulation;
+    }
+
+    button:focus, input:focus, select:focus {
+      outline: 3px solid #ff8e53;
+      outline-offset: 2px;
+    }
+
+    .checkbox {
+      transform: scale(1.2);
+      margin: 0 8px;
+    }
+
+    .streaks {
+      font-size: 1.4em;
+      font-weight: bold;
+      margin-top: 12px;
+      text-align: center;
+    }
+
+    .badge-container img {
+      width: 80px;
+      margin: 10px;
+      display: none;
+    }
+
+    @media screen and (max-width: 480px) {
+      h1 { font-size: 2.2em; }
+      .intro { font-size: 1.8em; }
+      .fox { font-size: 6em; }
+      button { font-size: 1.2em; padding: 12px 20px; }
+      input { font-size: 1.2em; padding: 12px; }
+      .checkbox { transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="gameContainer">
+    <div class="sticky-header">
+      <h1>Detective Number Mystery</h1>
+    </div>
+    <div class="fox">🦊</div>
+    <div class="intro" id="memoGreeting">Hello!</div>
+    <input type="text" id="childNameInput" placeholder="Enter your name">
+    <button onclick="startGame()">Start Game</button>
+    <div id="gameArea" style="display:none;">
+      <div class="streaks">
+        <div id="currentStreak">Current Streak: 0</div>
+        <div id="longestStreak">Longest Streak: 0</div>
+      </div>
+
+      <div class="directions" id="memoInstructions">
+        Memo will give you a number pattern. One number is missing. Can you find it?
+      </div>
+
+      <div class="timer-display" id="timerDisplay">Time: 00:00</div>
+
+      <div class="number-grid" id="numberGrid"></div>
+
+      <div class="feedback" id="feedbackArea"></div>
+
+      <div class="badge-container" id="badgeContainer">
+        <img src="badge1.png" alt="Badge 1" id="badge1">
+        <img src="badge2.png" alt="Badge 2" id="badge2">
+        <img src="badge3.png" alt="Badge 3" id="badge3">
+      </div>
+
+      <button class="continue-btn" id="nextRoundBtn" style="display:none;" onclick="startNextRound()">Next Round</button>
+      <button class="parent-btn" onclick="showParentSettings()">Parent Settings</button>
+      <button class="level-btn" onclick="showProgressChart()">Progress Chart</button>
+    </div>
+
+    <div id="parentSettings" style="display:none;" class="section parent-section">
+      <h2>Parent Settings</h2>
+      <div class="setting-row">
+        <label class="setting-label">Enable Timer</label>
+        <input type="checkbox" id="timerCheckbox" class="checkbox" checked>
+      </div>
+      <div class="setting-row">
+        <label class="setting-label">Enable Voice</label>
+        <input type="checkbox" id="voiceCheckbox" class="checkbox" checked>
+      </div>
+      <div class="setting-row">
+        <label class="setting-label">Select Level</label>
+        <select id="levelSelect">
+          <option value="1">Level 1</option>
+          <option value="2">Level 2</option>
+          <option value="3">Level 3</option>
+        </select>
+      </div>
+      <button class="parent-btn" onclick="hideParentSettings()">Close Settings</button>
+    </div>
+
+    <div id="progressChart" style="display:none;" class="section">
+      <h2>Your Progress</h2>
+      <canvas id="progressCanvas" width="300" height="200"></canvas>
+      <button class="level-btn" onclick="hideProgressChart()">Close Chart</button>
+    </div>
+  <script>
+    let childName = '';
+    let currentStreak = 0;
+    let longestStreak = 0;
+    let correctAnswer = null;
+    let timerInterval;
+    let secondsElapsed = 0;
+
+    function startGame() {
+      const nameInput = document.getElementById('childNameInput').value.trim();
+      if (nameInput === '') return;
+      childName = nameInput.charAt(0).toUpperCase() + nameInput.slice(1).toLowerCase();
+      document.getElementById('memoGreeting').textContent = `Hello ${childName}!`;
+      document.getElementById('gameArea').style.display = 'block';
+      document.getElementById('childNameInput').style.display = 'none';
+      document.querySelector('button[onclick="startGame()"]').style.display = 'none';
+      startNextRound();
+    }
+
+    function startNextRound() {
+      document.getElementById('feedbackArea').textContent = '';
+      document.getElementById('nextRoundBtn').style.display = 'none';
+      generateNumberGrid();
+      resetTimer();
+      if (document.getElementById('timerCheckbox').checked) startTimer();
+    }
+
+    function generateNumberGrid() {
+      const grid = document.getElementById('numberGrid');
+      grid.innerHTML = '';
+      const level = parseInt(document.getElementById('levelSelect').value);
+      const count = level * 4;
+      const numbers = [];
+      let start = Math.floor(Math.random() * 10) + 1;
+      for (let i = 0; i < count; i++) {
+        numbers.push(start + i);
+      }
+      const missingIndex = Math.floor(Math.random() * count);
+      correctAnswer = numbers[missingIndex];
+      numbers[missingIndex] = '?';
+
+      numbers.forEach(num => {
+        const box = document.createElement('div');
+        box.className = 'number-box';
+        box.textContent = num;
+        box.onclick = () => checkAnswer(num);
+        grid.appendChild(box);
+      });
+    }
+
+    function checkAnswer(selected) {
+      if (selected === '?') return;
+      if (parseInt(selected) === correctAnswer) {
+        document.getElementById('feedbackArea').textContent = 'Correct!';
+        document.getElementById('feedbackArea').className = 'feedback success';
+        currentStreak++;
+        if (currentStreak > longestStreak) longestStreak = currentStreak;
+        updateStreakDisplay();
+        updateBadge();
+        document.getElementById('nextRoundBtn').style.display = 'inline-block';
+        stopTimer();
+      } else {
+        document.getElementById('feedbackArea').textContent = 'Try again!';
+        document.getElementById('feedbackArea').className = 'feedback error';
+        currentStreak = 0;
+        updateStreakDisplay();
+      }
+    }
+
+    function updateStreakDisplay() {
+      document.getElementById('currentStreak').textContent = `Current Streak: ${currentStreak}`;
+      document.getElementById('longestStreak').textContent = `Longest Streak: ${longestStreak}`;
+    }
+
+    function updateBadge() {
+      const badge1 = document.getElementById('badge1');
+      const badge2 = document.getElementById('badge2');
+      const badge3 = document.getElementById('badge3');
+      badge1.style.display = currentStreak >= 3 ? 'inline-block' : 'none';
+      badge2.style.display = currentStreak >= 5 ? 'inline-block' : 'none';
+      badge3.style.display = currentStreak >= 8 ? 'inline-block' : 'none';
+    }
+
+    function startTimer() {
+      secondsElapsed = 0;
+      timerInterval = setInterval(() => {
+        secondsElapsed++;
+        const minutes = Math.floor(secondsElapsed / 60);
+        const seconds = secondsElapsed % 60;
+        document.getElementById('timerDisplay').textContent = `Time: ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+      }, 1000);
+    }
+
+    function stopTimer() {
+      clearInterval(timerInterval);
+    }
+
+    function resetTimer() {
+      stopTimer();
+      document.getElementById('timerDisplay').textContent = 'Time: 00:00';
+    }
+
+    function showParentSettings() {
+      document.getElementById('parentSettings').style.display = 'block';
+    }
+
+    function hideParentSettings() {
+      document.getElementById('parentSettings').style.display = 'none';
+    }
+
+    function showProgressChart() {
+      document.getElementById('gameContainer').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      document.getElementById('progressChart').style.display = 'block';
+      const canvas = document.getElementById('progressCanvas');
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#4caf50';
+      ctx.fillRect(50, canvas.height - currentStreak * 10, 50, currentStreak * 10);
+      ctx.fillStyle = '#ff9800';
+      ctx.fillRect(150, canvas.height - longestStreak * 10, 50, longestStreak * 10);
+      ctx.fillStyle = '#000';
+      ctx.font = '14px Arial';
+      ctx.fillText('Current', 50, canvas.height - currentStreak * 10 - 10);
+      ctx.fillText('Longest', 150, canvas.height - longestStreak * 10 - 10);
+    }
+
+    function hideProgressChart() {
+      document.getElementById('progressChart').style.display = 'none';
+    }
+  </script>
+</body>
+</html>
