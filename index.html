@@ -112,13 +112,17 @@
     </div>
     <div class="fox">🦊</div>
     <div class="intro" id="memoGreeting">Hello!</div>
-    <div class="intro" id="memoGreeting">Hello!</div>
 
-<!-- 👇 Hear Memo Button FIRST -->
-<button onclick="playMemoIntro()">Hear Memo</button>
+    <!-- 👂 Hear Memo Button -->
+    <button onclick="playMemoIntro()">Hear Memo</button>
 
+    <!-- 🧒 Name Input -->
     <input type="text" id="childNameInput" placeholder="Enter your name">
+
+    <!-- ▶️ Start Game Button -->
     <button onclick="startGame()">Start Game</button>
+
+    <!-- 🎮 Game Area -->
     <div id="gameArea" style="display:none;">
       <div class="streaks">
         <div id="currentStreak">Current Streak: 0</div>
@@ -130,9 +134,7 @@
       </div>
 
       <div class="timer-display" id="timerDisplay">Time: 00:00</div>
-
       <div class="number-grid" id="numberGrid"></div>
-
       <div class="feedback" id="feedbackArea"></div>
 
       <div class="badge-container" id="badgeContainer">
@@ -146,6 +148,7 @@
       <button class="level-btn" onclick="showProgressChart()">Progress Chart</button>
     </div>
 
+        <!-- ⚙️ Parent Settings -->
     <div id="parentSettings" style="display:none;" class="section parent-section">
       <h2>Parent Settings</h2>
       <div class="setting-row">
@@ -167,11 +170,15 @@
       <button class="parent-btn" onclick="hideParentSettings()">Close Settings</button>
     </div>
 
+    <!-- 📊 Progress Chart -->
     <div id="progressChart" style="display:none;" class="section">
       <h2>Your Progress</h2>
       <canvas id="progressCanvas" width="300" height="200"></canvas>
       <button class="level-btn" onclick="hideProgressChart()">Close Chart</button>
     </div>
+  </div>
+
+  <!-- 🧠 Game Logic -->
   <script>
     let childName = '';
     let currentStreak = 0;
@@ -179,6 +186,15 @@
     let correctAnswer = null;
     let timerInterval;
     let secondsElapsed = 0;
+
+    function playMemoIntro() {
+      const voiceEnabled = document.getElementById('voiceCheckbox')?.checked;
+      if (!voiceEnabled) return;
+
+      const intro = "Hello Detective! Please enter your name so I can greet you and begin the mystery.";
+      const utterance = new SpeechSynthesisUtterance(intro);
+      speechSynthesis.speak(utterance);
+    }
 
     function startGame() {
       const nameInput = document.getElementById('childNameInput').value.trim();
@@ -198,15 +214,6 @@
       resetTimer();
       if (document.getElementById('timerCheckbox').checked) startTimer();
     }
-// Line ~425
-function playMemoIntro() {
-  const voiceEnabled = document.getElementById('voiceCheckbox')?.checked;
-  if (!voiceEnabled) return;
-
-  const intro = "Hello Detective! Please enter your name so I can greet you and begin the mystery.";
-  const utterance = new SpeechSynthesisUtterance(intro);
-  speechSynthesis.speak(utterance);
-}
 
     function generateNumberGrid() {
       const grid = document.getElementById('numberGrid');
@@ -256,12 +263,9 @@ function playMemoIntro() {
     }
 
     function updateBadge() {
-      const badge1 = document.getElementById('badge1');
-      const badge2 = document.getElementById('badge2');
-      const badge3 = document.getElementById('badge3');
-      badge1.style.display = currentStreak >= 3 ? 'inline-block' : 'none';
-      badge2.style.display = currentStreak >= 5 ? 'inline-block' : 'none';
-      badge3.style.display = currentStreak >= 8 ? 'inline-block' : 'none';
+      document.getElementById('badge1').style.display = currentStreak >= 3 ? 'inline-block' : 'none';
+      document.getElementById('badge2').style.display = currentStreak >= 5 ? 'inline-block' : 'none';
+      document.getElementById('badge3').style.display = currentStreak >= 8 ? 'inline-block' : 'none';
     }
 
     function startTimer() {
