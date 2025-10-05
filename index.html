@@ -198,6 +198,15 @@
       resetTimer();
       if (document.getElementById('timerCheckbox').checked) startTimer();
     }
+// Line ~425
+function playMemoIntro() {
+  const voiceEnabled = document.getElementById('voiceCheckbox')?.checked;
+  if (!voiceEnabled) return;
+
+  const intro = "Hello Detective! Please enter your name so I can greet you and begin the mystery.";
+  const utterance = new SpeechSynthesisUtterance(intro);
+  speechSynthesis.speak(utterance);
+}
 
     function generateNumberGrid() {
       const grid = document.getElementById('numberGrid');
