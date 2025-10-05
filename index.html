@@ -255,23 +255,30 @@
     }
 
     function checkAnswer(selected) {
-      if (selected === '?') return;
-      if (parseInt(selected) === correctAnswer) {
-        document.getElementById('feedbackArea').textContent = 'Correct!';
-        document.getElementById('feedbackArea').className = 'feedback success';
-        currentStreak++;
-        if (currentStreak > longestStreak) longestStreak = currentStreak;
-        updateStreakDisplay();
-        updateBadge();
-        document.getElementById('nextRoundBtn').style.display = 'inline-block';
-        stopTimer();
-      } else {
-        document.getElementById('feedbackArea').textContent = 'Try again!';
-        document.getElementById('feedbackArea').className = 'feedback error';
-        currentStreak = 0;
-        updateStreakDisplay();
-      }
-    }
+  const boxes = document.querySelectorAll('.number-box');
+  boxes.forEach(box => box.style.backgroundColor = '#fff'); // Reset all
+
+  const clickedBox = Array.from(boxes).find(box => box.textContent === selected.toString());
+  if (clickedBox) clickedBox.style.backgroundColor = '#c8e6c9'; // Highlight selection
+
+  if (selected === '?') return;
+  if (parseInt(selected) === correctAnswer) {
+    document.getElementById('feedbackArea').textContent = 'Correct!';
+    document.getElementById('feedbackArea').className = 'feedback success';
+    currentStreak++;
+    if (currentStreak > longestStreak) longestStreak = currentStreak;
+    updateStreakDisplay();
+    updateBadge();
+    document.getElementById('nextRoundBtn').style.display = 'inline-block';
+    stopTimer();
+  } else {
+    document.getElementById('feedbackArea').textContent = 'Try again!';
+    document.getElementById('feedbackArea').className = 'feedback error';
+    currentStreak = 0;
+    updateStreakDisplay();
+  }
+}
+
 
     function updateStreakDisplay() {
       document.getElementById('currentStreak').textContent = `Current Streak: ${currentStreak}`;
