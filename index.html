@@ -6,337 +6,511 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #4caf50;
-      text-align: center;
-      padding: 5px;
-      margin: 0;
-      min-height: 100vh;
+        font-family: Arial, sans-serif;
+        background: #4caf50;
+        text-align: center;
+        padding: 5px;
+        margin: 0;
+        min-height: 100vh;
     }
-
     .container {
-      background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%);
-      padding: 20px 15px;
-      border-radius: 20px;
-      max-width: 420px;
-      width: 95%;
-      margin: 10px auto;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.4);
-      min-height: 85vh;
+        background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%);
+        padding: 20px 15px;
+        border-radius: 20px;
+        max-width: 420px;
+        width: 95%;
+        margin: 10px auto;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+        min-height: 85vh;
     }
-
+    .parent-container {
+        background: linear-gradient(135deg, #e1f5fe 0%, #b3e5fc 100%);
+        border: 3px solid #2196f3;
+    }
+    .game-container { min-height: 95vh; }
     .sticky-header {
-      position: sticky;
-      top: 0;
-      background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%);
-      z-index: 100;
-      padding: 8px 0;
-      border-radius: 15px;
-      margin-bottom: 10px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        position: sticky;
+        top: 0;
+        background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%);
+        z-index: 100;
+        padding: 8px 0;
+        border-radius: 15px;
+        margin-bottom: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
-
     h1 {
-      color: #1b5e20;
-      font-size: 3em;
-      margin: 20px 0;
-      text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
-      line-height: 1.1;
+        color: #1b5e20;
+        font-size: 3.5em;
+        margin: 25px 0;
+        text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+        line-height: 1.1;
+        font-family: 'Comic Sans MS', 'Fredoka', 'Baloo', sans-serif;
     }
-
-    .fox {
-      font-size: 8em;
-      margin: 20px 0;
-      text-shadow: 4px 4px 8px rgba(0,0,0,0.2);
+    .game-title, .main-directions {
+        font-size: 1.6em;
+        font-family: 'Comic Sans MS', 'Fredoka', 'Baloo', sans-serif;
+        color: #1b5e20;
+        margin: 10px 0;
+        text-align: center;
     }
-
+    .main-directions {
+        padding: 15px;
+        min-height: 60px;
+        overflow-wrap: break-word;
+    }
+    .fox { font-size: 10em; margin: 30px 0; text-shadow: 4px 4px 8px rgba(0,0,0,0.2); }
+    .fox-small { font-size: 1.8em; margin: 0; }
     .intro {
-      font-size: 2.5em;
-      color: #1b5e20;
-      margin: 20px 0;
-      font-weight: bold;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        font-size: 3em;
+        color: #1b5e20;
+        margin: 30px 0;
+        font-weight: bold;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
     }
-
     button {
-      background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
-      color: white;
-      border: none;
-      padding: 16px 24px;
-      font-size: 1.4em;
-      border-radius: 30px;
-      cursor: pointer;
-      margin: 12px 6px;
-      font-weight: bold;
-      box-shadow: 0 6px 12px rgba(0,0,0,0.3);
-      touch-action: manipulation;
+        background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
+        color: white;
+        border: none;
+        padding: 20px 30px;
+        font-size: 1.6em;
+        border-radius: 30px;
+        cursor: pointer;
+        margin: 15px 8px;
+        font-weight: bold;
+        box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        touch-action: manipulation;
     }
-
-    button:focus, input:focus, select:focus {
-      outline: 3px solid #ff8e53;
-      outline-offset: 2px;
+    .continue-btn {
+        background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);
+        font-size: 1.4em;
+        padding: 18px 25px;
     }
-
-    .checkbox {
-      transform: scale(1.2);
-      margin: 0 8px;
+    .parent-btn {
+        background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+        font-size: 1.2em;
+        padding: 15px 20px;
     }
-
-    .streaks {
-      font-size: 1.4em;
-      font-weight: bold;
-      margin-top: 12px;
-      text-align: center;
+    .level-btn {
+        background: linear-gradient(135deg, #9c27b0 0%, #7b1fa2 100%);
+        font-size: 1.1em;
+        padding: 12px 15px;
+        margin: 8px;
     }
-
-    .badge-container img {
-      width: 80px;
-      margin: 10px;
-      display: none;
+    .num-btn {
+        background: linear-gradient(135deg, #607d8b 0%, #455a64 100%);
+        color: white;
+        border: none;
+        padding: 15px;
+        font-size: 1.4em;
+        border-radius: 8px;
+        cursor: pointer;
+        margin: 3px;
+        font-weight: bold;
+        min-width: 50px;
+        touch-action: manipulation;
     }
-
-    @media screen and (max-width: 480px) {
-      h1 { font-size: 2.2em; }
-      .intro { font-size: 1.8em; }
-      .fox { font-size: 6em; }
-      button { font-size: 1.2em; padding: 12px 20px; }
-      input { font-size: 1.2em; padding: 12px; }
-      .checkbox { transform: scale(1); }
+    input {
+        padding: 18px;
+        font-size: 1.4em;
+        border: 4px solid #4caf50;
+        border-radius: 12px;
+        width: 250px;
+        max-width: 85%;
+        text-align: center;
+        margin: 20px auto;
+        background: white;
+        font-weight: bold;
+        display: block;
     }
-    .number-box {
-  display: inline-block;
-  width: 60px;
-  height: 60px;
-  line-height: 60px;
-  margin: 8px;
-  font-size: 1.6em;
-  font-weight: bold;
-  background-color: #fff;
-  color: #1b5e20;
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-  cursor: pointer;
-  user-select: none;
-}
-
+    .answer-input {
+        width: 200px;
+        font-size: 1.3em;
+        color: #1b5e20;
+        display: block;
+        margin: 15px auto;
+        padding: 15px;
+        cursor: pointer;
+        user-select: none;
+    }
+    .number-pad {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        max-width: 200px;
+        margin: 15px auto;
+    }
+    .section {
+        margin: 20px 0;
+        padding: 25px;
+        background: rgba(255,255,255,0.7);
+        border-radius: 15px;
+        border: 4px solid #4caf50;
+    }
+    .parent-section {
+        border-color: #2196f3;
+        margin: 15px 0;
+        padding: 15px;
+    }
+    .directions {
+        font-size: 1.4em;
+        color: #1b5e20;
+        margin: 20px 0;
+        font-weight: bold;
+    }
+    .setting-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 12px 0;
+        padding: 10px;
+        background: rgba(255,255,255,0.8);
+        border-radius: 8px;
+        font-size: 1em;
+    }
+    .setting-label {
+        color: #37474f;
+        font-weight: bold;
+        text-align: left;
+        flex: 1;
+    }
+    .checkbox { transform: scale(1.2); margin: 0 12px; }
+    .hidden { display: none; }
   </style>
 </head>
 <body>
-  <div class="container" id="gameContainer">
-    <div class="sticky-header">
-      <h1>Detective Number Mystery</h1>
-    </div>
-    <div class="fox">🦊</div>
-    <div class="intro" id="memoGreeting">Hello!</div>
 
-    <!-- 👂 Hear Memo Button -->
-    <button onclick="playMemoIntro()">Hear Memo</button>
+<!-- Welcome Screen -->
+<div id="welcome">
+  <div class="container">
+    <h1>🎯 Detective Number Mystery</h1>
+    <div class="fox">🦊🔍</div>
+    <div class="intro">Hi! I'm Memo the Fox!</div>
+    <button onclick="startIntro()">🔊 Meet Memo!</button>
+  </div>
+</div>
 
-    <!-- 🧒 Name Input -->
-    <input type="text" id="childNameInput" placeholder="Enter your name">
-
-    <!-- ▶️ Start Game Button -->
-    <button onclick="startGame()">Start Game</button>
-
-    <!-- 🎮 Game Area -->
-    <div id="gameArea" style="display:none;">
-      <div class="streaks">
-        <div id="currentStreak">Current Streak: 0</div>
-        <div id="longestStreak">Longest Streak: 0</div>
-      </div>
-
-      <div class="directions" id="memoInstructions">
-        Memo will give you a number pattern. One number is missing. Can you find it?
-      </div>
-
-      <div class="timer-display" id="timerDisplay">Time: 00:00</div>
-      <div class="number-grid" id="numberGrid"></div>
-      <div class="feedback" id="feedbackArea"></div>
-
-      <div class="badge-container" id="badgeContainer">
-        <img src="badge1.png" alt="Badge 1" id="badge1">
-        <img src="badge2.png" alt="Badge 2" id="badge2">
-        <img src="badge3.png" alt="Badge 3" id="badge3">
-      </div>
-
-      <button class="continue-btn" id="nextRoundBtn" style="display:none;" onclick="startNextRound()">Next Round</button>
-      <button class="parent-btn" onclick="showParentSettings()">Parent Settings</button>
-      <button class="level-btn" onclick="showProgressChart()">Progress Chart</button>
-    </div>
-
-        <!-- ⚙️ Parent Settings -->
-    <div id="parentSettings" style="display:none;" class="section parent-section">
-      <h2>Parent Settings</h2>
-      <div class="setting-row">
-        <label class="setting-label">Enable Timer</label>
-        <input type="checkbox" id="timerCheckbox" class="checkbox" checked>
-      </div>
-      <div class="setting-row">
-        <label class="setting-label">Enable Voice</label>
-        <input type="checkbox" id="voiceCheckbox" class="checkbox" checked>
-      </div>
-      <div class="setting-row">
-        <label class="setting-label">Select Level</label>
-        <select id="levelSelect">
-          <option value="1">Level 1</option>
-          <option value="2">Level 2</option>
-          <option value="3">Level 3</option>
-        </select>
-      </div>
-      <button class="parent-btn" onclick="hideParentSettings()">Close Settings</button>
-    </div>
-
-    <!-- 📊 Progress Chart -->
-    <div id="progressChart" style="display:none;" class="section">
-      <h2>Your Progress</h2>
-      <canvas id="progressCanvas" width="300" height="200"></canvas>
-      <button class="level-btn" onclick="hideProgressChart()">Close Chart</button>
+<!-- Name Entry Screen -->
+<div id="name-screen" class="hidden">
+  <div class="container">
+    <h1>🎯 Detective Number Mystery</h1>
+    <div class="fox">🦊🔍</div>
+    <div class="section">
+      <div class="directions">What's your name, junior detective?</div>
+      <input id="nameField" placeholder="Enter your name" maxlength="15">
+      <button class="continue-btn" onclick="processName()">Next</button>
     </div>
   </div>
+</div>
 
-  <!-- 🧠 Game Logic -->
-  <script>
-    let childName = '';
-    let currentStreak = 0;
-    let longestStreak = 0;
-    let correctAnswer = null;
-    let timerInterval;
-    let secondsElapsed = 0;
+<!-- Greeting Screen -->
+<div id="greeting-screen" class="hidden">
+  <div class="container">
+    <h1>🎯 Detective Number Mystery</h1>
+    <div class="fox">🦊🔍</div>
+    <div class="section">
+      <div class="directions" id="greeting-text"></div>
+      <button class="continue-btn" onclick="showParentSettings()">Continue</button>
+    </div>
+  </div>
+</div>
 
-    function playMemoIntro() {
-      const voiceEnabled = document.getElementById('voiceCheckbox')?.checked;
-      if (!voiceEnabled) return;
+<!-- Parent Settings Screen -->
+<div id="parent-screen" class="hidden">
+  <div class="container parent-container">
+    <h1 style="color: #1565c0;">🎮 Parent Settings</h1>
+    <div class="fox">👨‍👩‍👧‍👦</div>
+    <div class="parent-section">
+      <h3 style="color: #1565c0; font-size: 1.3em; margin: 10px 0;">🎯 Starting Level</h3>
+      <select id="level-select">
+        <option value="1">Level 1 (Numbers 1-4)</option>
+        <option value="2">Level 2 (Numbers 1-5)</option>
+        <option value="3">Level 3 (Numbers 1-6)</option>
+        <option value="4">Level 4 (Numbers 1-7)</option>
+        <option value="5">Level 5 (Numbers 1-8)</option>
+      </select>
+    </div>
+    <div class="parent-section">
+      <h3 style="color: #1565c0; font-size: 1.3em; margin: 10px 0;">🔊 Audio</h3>
+      <div class="setting-row">
+        <div class="setting-label">Voice narration:</div>
+        <input type="checkbox" class="checkbox" id="voice-enabled" checked>
+      </div>
+      <div class="setting-row">
+        <div class="setting-label">Say numbers:</div>
+        <input type="checkbox" class="checkbox" id="speak-numbers" checked>
+      </div>
+    </div>
+    <button class="parent-btn" onclick="startGame()">Start Game</button>
+    <button class="parent-btn" onclick="showScreen('greeting-screen')">Back</button>
+  </div>
+</div>
 
-      const intro = "Hello Detective! Please enter your name so I can greet you and begin the mystery.";
-      const utterance = new SpeechSynthesisUtterance(intro);
-      speechSynthesis.speak(utterance);
-    }
+  <!-- Game Screen -->
+<div id="game-screen" class="hidden">
+  <div class="container game-container">
+    <div class="sticky-header game-header">
+      <div class="game-title" id="game-title">🎯 Level 1: Numbers 1-4</div>
+      <div class="header-right">
+        <div class="streak-info" id="streak-display">STREAK: 0 | MISSION: Get 5 in a row!</div>
+        <div class="longest-streak">Longest: <span id="longest-streak">0</span></div>
+      </div>
+    </div>
 
-    function startGame() {
-      const nameInput = document.getElementById('childNameInput').value.trim();
-      if (nameInput === '') return;
-      childName = nameInput.charAt(0).toUpperCase() + nameInput.slice(1).toLowerCase();
-      document.getElementById('memoGreeting').textContent = `Hello ${childName}!`;
-      document.getElementById('gameArea').style.display = 'block';
-      document.getElementById('childNameInput').style.display = 'none';
-      document.querySelector('button[onclick="startGame()"]').style.display = 'none';
-      startNextRound();
-    }
+    <div class="main-directions" id="main-directions">Numbers 1 through 4 below, some are missing:</div>
 
-    function startNextRound() {
-      document.getElementById('feedbackArea').textContent = '';
-      document.getElementById('nextRoundBtn').style.display = 'none';
-      generateNumberGrid();
-      resetTimer();
-      if (document.getElementById('timerCheckbox').checked) startTimer();
-    }
+    <div class="number-grid" id="number-grid"></div>
 
-    function generateNumberGrid() {
-      const grid = document.getElementById('numberGrid');
-      grid.innerHTML = '';
-      const level = parseInt(document.getElementById('levelSelect').value);
-      const count = level * 4;
-      const numbers = [];
-      let start = Math.floor(Math.random() * 10) + 1;
-      for (let i = 0; i < count; i++) {
-        numbers.push(start + i);
-      }
-      const missingIndex = Math.floor(Math.random() * count);
-      correctAnswer = numbers[missingIndex];
-      numbers[missingIndex] = '?';
+    <div class="timer-display" id="timer-display" style="display:none;"></div>
 
-      numbers.forEach(num => {
-        const box = document.createElement('div');
-        box.className = 'number-box';
-        box.textContent = num;
-        box.onclick = () => checkAnswer(num);
-        grid.appendChild(box);
-      });
-    }
+    <div class="section" id="input-section" style="display:none;">
+      <div class="directions" id="input-prompt">Enter the missing numbers:</div>
+      <input id="answer-input" class="answer-input" readonly onclick="preventKeyboard(event)">
+      <div class="number-pad">
+        <button class="num-btn" onclick="addToAnswer('1')">1</button>
+        <button class="num-btn" onclick="addToAnswer('2')">2</button>
+        <button class="num-btn" onclick="addToAnswer('3')">3</button>
+        <button class="num-btn" onclick="addToAnswer('4')">4</button>
+        <button class="num-btn" onclick="addToAnswer('5')">5</button>
+        <button class="num-btn" onclick="addToAnswer('6')">6</button>
+        <button class="num-btn" onclick="addToAnswer('7')">7</button>
+        <button class="num-btn" onclick="addToAnswer('8')">8</button>
+        <button class="num-btn" onclick="addSpace()">␣</button>
+        <button class="num-btn" onclick="deleteLastChar()">⌫</button>
+        <button class="num-btn" onclick="clearAnswer()">✖</button>
+        <button class="num-btn" onclick="checkAnswer()">✅</button>
+      </div>
+    </div>
 
-    function checkAnswer(selected) {
-  const boxes = document.querySelectorAll('.number-box');
-  boxes.forEach(box => box.style.backgroundColor = '#fff'); // Reset all
+    <div class="feedback" id="feedback"></div>
 
-  const clickedBox = Array.from(boxes).find(box => box.textContent === selected.toString());
-  if (clickedBox) clickedBox.style.backgroundColor = '#c8e6c9'; // Highlight selection
+    <button id="try-again-btn" class="continue-btn hidden" onclick="enableInput()">Try Again</button>
+    <button id="show-numbers-btn" class="continue-btn hidden" onclick="showNumbersAgain()">Show Numbers Again</button>
+    <button id="next-round-btn" class="continue-btn hidden" onclick="nextRound()">Next Round</button>
 
-  if (selected === '?') return;
-  if (parseInt(selected) === correctAnswer) {
-    document.getElementById('feedbackArea').textContent = 'Correct!';
-    document.getElementById('feedbackArea').className = 'feedback success';
-    currentStreak++;
-    if (currentStreak > longestStreak) longestStreak = currentStreak;
-    updateStreakDisplay();
-    updateBadge();
-    document.getElementById('nextRoundBtn').style.display = 'inline-block';
-    stopTimer();
-  } else {
-    document.getElementById('feedbackArea').textContent = 'Try again!';
-    document.getElementById('feedbackArea').className = 'feedback error';
-    currentStreak = 0;
-    updateStreakDisplay();
+    <div id="level-options" class="level-options hidden">
+      <button class="level-btn" onclick="stayLevel()">Same Level</button>
+      <button class="level-btn" onclick="nextLevel()">Next Level</button>
+      <button class="level-btn" onclick="showProgress()">Progress Chart</button>
+      <button class="level-btn" onclick="finalEnd()">Quit Game</button>
+    </div>
+
+    <div id="progress-chart" class="hidden">
+      <div class="badge-display">
+        <div class="badge-icons" id="badge-icons">🏆</div>
+        <div id="badge-count">0 badges</div>
+      </div>
+      <table class="progress-table">
+        <thead>
+          <tr><th>Level</th><th>Right</th><th>Attempts</th><th>Accuracy</th></tr>
+        </thead>
+        <tbody id="progress-content"></tbody>
+        <tfoot>
+          <tr class="totals-row">
+            <td>Total</td>
+            <td id="total-right">0</td>
+            <td id="total-attempts">0</td>
+            <td id="total-percent">0%</td>
+          </tr>
+        </tfoot>
+      </table>
+      <button id="resume-btn" class="continue-btn hidden" onclick="resumeGame()">Resume Game</button>
+      <button id="quit-btn" class="continue-btn hidden" onclick="endGame()">Quit Game</button>
+    </div>
+  </div>
+</div>
+
+  <!-- Game Screen -->
+<div id="game-screen" class="hidden">
+  <div class="container game-container">
+    <div class="sticky-header game-header">
+      <div class="game-title" id="game-title">🎯 Level 1: Numbers 1-4</div>
+      <div class="header-right">
+        <div class="streak-info" id="streak-display">STREAK: 0 | MISSION: Get 5 in a row!</div>
+        <div class="longest-streak">Longest: <span id="longest-streak">0</span></div>
+      </div>
+    </div>
+
+    <div class="main-directions" id="main-directions">Numbers 1 through 4 below, some are missing:</div>
+
+    <div class="number-grid" id="number-grid"></div>
+
+    <div class="timer-display" id="timer-display" style="display:none;"></div>
+
+    <div class="section" id="input-section" style="display:none;">
+      <div class="directions" id="input-prompt">Enter the missing numbers:</div>
+      <input id="answer-input" class="answer-input" readonly onclick="preventKeyboard(event)">
+      <div class="number-pad">
+        <button class="num-btn" onclick="addToAnswer('1')">1</button>
+        <button class="num-btn" onclick="addToAnswer('2')">2</button>
+        <button class="num-btn" onclick="addToAnswer('3')">3</button>
+        <button class="num-btn" onclick="addToAnswer('4')">4</button>
+        <button class="num-btn" onclick="addToAnswer('5')">5</button>
+        <button class="num-btn" onclick="addToAnswer('6')">6</button>
+        <button class="num-btn" onclick="addToAnswer('7')">7</button>
+        <button class="num-btn" onclick="addToAnswer('8')">8</button>
+        <button class="num-btn" onclick="addSpace()">␣</button>
+        <button class="num-btn" onclick="deleteLastChar()">⌫</button>
+        <button class="num-btn" onclick="clearAnswer()">✖</button>
+        <button class="num-btn" onclick="checkAnswer()">✅</button>
+      </div>
+    </div>
+
+    <div class="feedback" id="feedback"></div>
+
+    <button id="try-again-btn" class="continue-btn hidden" onclick="enableInput()">Try Again</button>
+    <button id="show-numbers-btn" class="continue-btn hidden" onclick="showNumbersAgain()">Show Numbers Again</button>
+    <button id="next-round-btn" class="continue-btn hidden" onclick="nextRound()">Next Round</button>
+
+    <div id="level-options" class="level-options hidden">
+      <button class="level-btn" onclick="stayLevel()">Same Level</button>
+      <button class="level-btn" onclick="nextLevel()">Next Level</button>
+      <button class="level-btn" onclick="showProgress()">Progress Chart</button>
+      <button class="level-btn" onclick="finalEnd()">Quit Game</button>
+    </div>
+
+    <div id="progress-chart" class="hidden">
+      <div class="badge-display">
+        <div class="badge-icons" id="badge-icons">🏆</div>
+        <div id="badge-count">0 badges</div>
+      </div>
+      <table class="progress-table">
+        <thead>
+          <tr><th>Level</th><th>Right</th><th>Attempts</th><th>Accuracy</th></tr>
+        </thead>
+        <tbody id="progress-content"></tbody>
+        <tfoot>
+          <tr class="totals-row">
+            <td>Total</td>
+            <td id="total-right">0</td>
+            <td id="total-attempts">0</td>
+            <td id="total-percent">0%</td>
+          </tr>
+        </tfoot>
+      </table>
+      <button id="resume-btn" class="continue-btn hidden" onclick="resumeGame()">Resume Game</button>
+      <button id="quit-btn" class="continue-btn hidden" onclick="endGame()">Quit Game</button>
+    </div>
+  </div>
+</div>
+
+      .display = 'block';
+    disableInput();
   }
 }
 
+// Celebration
+function showMegaCelebration() {
+  const celebration = document.createElement('div');
+  celebration.className = 'mega-celebration';
+  celebration.innerHTML =
+    '<div class="badge-emoji">🏆</div>' +
+    '<div class="mega-celebration-text">DETECTIVE BADGE EARNED!</div>' +
+    `<div class="mega-celebration-text">${playerName} got 5 in a row!</div>`;
+  document.body.appendChild(celebration);
 
-    function updateStreakDisplay() {
-      document.getElementById('currentStreak').textContent = `Current Streak: ${currentStreak}`;
-      document.getElementById('longestStreak').textContent = `Longest Streak: ${longestStreak}`;
-    }
+  speak(`Amazing work, ${playerName}! You earned a detective badge!`);
 
-    function updateBadge() {
-      document.getElementById('badge1').style.display = currentStreak >= 3 ? 'inline-block' : 'none';
-      document.getElementById('badge2').style.display = currentStreak >= 5 ? 'inline-block' : 'none';
-      document.getElementById('badge3').style.display = currentStreak >= 8 ? 'inline-block' : 'none';
-    }
+  setTimeout(() => {
+    document.body.removeChild(celebration);
+  }, 4000);
+}
 
-    function startTimer() {
-      secondsElapsed = 0;
-      timerInterval = setInterval(() => {
-        secondsElapsed++;
-        const minutes = Math.floor(secondsElapsed / 60);
-        const seconds = secondsElapsed % 60;
-        document.getElementById('timerDisplay').textContent = `Time: ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-      }, 1000);
-    }
+// Review
+function showNumbersAgain() {
+  const grid = document.getElementById('number-grid');
+  grid.classList.remove('hidden-numbers');
+  document.getElementById('try-again-btn').style.display = 'none';
+  numbersVisible = true;
+  disableInput();
 
-    function stopTimer() {
-      clearInterval(timerInterval);
-    }
+  if (gameTimer) clearInterval(gameTimer);
 
-    function resetTimer() {
-      stopTimer();
-      document.getElementById('timerDisplay').textContent = 'Time: 00:00';
-    }
+  speak('Here are the numbers again. Study them carefully!', () => {
+    const duration = levelDurations[currentLevel] || 7;
+    startTimer(duration);
+  });
+}
 
-    function showParentSettings() {
-      document.getElementById('parentSettings').style.display = 'block';
-    }
+// Level navigation
+function nextRound() {
+  createNewRound();
+}
 
-    function hideParentSettings() {
-      document.getElementById('parentSettings').style.display = 'none';
-    }
+function stayLevel() {
+  consecutiveCorrect = 0;
+  document.getElementById('level-options').style.display = 'none';
+  createNewRound();
+}
 
-    function showProgressChart() {
-      document.getElementById('gameContainer').scrollIntoView({ behavior: 'smooth', block: 'start' });
-      document.getElementById('progressChart').style.display = 'block';
-      const canvas = document.getElementById('progressCanvas');
-      const ctx = canvas.getContext('2d');
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = '#4caf50';
-      ctx.fillRect(50, canvas.height - currentStreak * 10, 50, currentStreak * 10);
-      ctx.fillStyle = '#ff9800';
-      ctx.fillRect(150, canvas.height - longestStreak * 10, 50, longestStreak * 10);
-      ctx.fillStyle = '#000';
-      ctx.font = '14px Arial';
-      ctx.fillText('Current', 50, canvas.height - currentStreak * 10 - 10);
-      ctx.fillText('Longest', 150, canvas.height - longestStreak * 10 - 10);
-    }
+function nextLevel() {
+  if (currentLevel < 5) {
+    currentLevel++;
+    const config = levelConfig[currentLevel];
+    document.getElementById('game-title').textContent = `🎯 Level ${currentLevel}: ${config.description}`;
+    document.getElementById('main-directions').textContent = `Numbers 1 through ${config.numbers.length} below, some are missing:`;
+    speak(`Moving to level ${currentLevel}!`);
+  }
+  consecutiveCorrect = 0;
+  document.getElementById('level-options').style.display = 'none';
+  setTimeout(createNewRound, 2000);
+}
 
-    function hideProgressChart() {
-      document.getElementById('progressChart').style.display = 'none';
-    }
-  </script>
+// Progress
+function showProgress() {
+  document.getElementById('level-options').style.display = 'none';
+
+  let badgeIcons = '';
+  for (let i = 0; i < badges; i++) badgeIcons += '🏆';
+  document.getElementById('badge-icons').textContent = badgeIcons;
+  document.getElementById('badge-count').textContent = `${badges} badge${badges !== 1 ? 's' : ''}`;
+
+  const tbody = document.getElementById('progress-content');
+  tbody.innerHTML = '';
+
+  let totalRight = 0, totalAttempts = 0;
+
+  for (let level = 1; level <= 5; level++) {
+    const levelStats = stats[level];
+    totalRight += levelStats.right;
+    totalAttempts += levelStats.total;
+
+    const pct = levelStats.total > 0 ? Math.round((levelStats.right / levelStats.total) * 100) : 0;
+
+    const row = document.createElement('tr');
+    row.innerHTML = `<td>Level ${level}</td><td>${levelStats.right}</td><td>${levelStats.total}</td><td>${pct}%</td>`;
+    tbody.appendChild(row);
+  }
+
+  const totalPct = totalAttempts > 0 ? Math.round((totalRight / totalAttempts) * 100) : 0;
+  document.getElementById('total-right').textContent = totalRight;
+  document.getElementById('total-attempts').textContent = totalAttempts;
+  document.getElementById('total-percent').textContent = `${totalPct}%`;
+
+  document.getElementById('progress-chart').style.display = 'block';
+  document.getElementById('resume-btn').style.display = 'block';
+  document.getElementById('quit-btn').style.display = 'block';
+}
+
+function resumeGame() {
+  consecutiveCorrect = 0;
+  document.getElementById('progress-chart').style.display = 'none';
+  document.getElementById('resume-btn').style.display = 'none';
+  document.getElementById('quit-btn').style.display = 'none';
+  createNewRound();
+}
+
+function endGame() {
+  gameEnded = true;
+  speak('Game ended. Thanks for playing!');
+  showScreen('welcome');
+}
+
+function finalEnd() {
+  gameEnded = true;
+  speak('Thank you for playing the Detective Number Mystery Game! Goodbye!');
+  showScreen('welcome');
+}
+</script>
 </body>
 </html>
+  
